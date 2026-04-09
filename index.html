@@ -1,22 +1,104 @@
 <!DOCTYPE html>
-<html>
-<head><title>英文單字測驗</title></head>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>English World - Vocabulary Test</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f0f8ff; }
+        #box { background: white; padding: 20px; border-radius: 15px; display: inline-block; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input { padding: 10px; margin: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; background-color: #008cba; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .wrong { color: red; }
+    </style>
+</head>
 <body>
-    <h1>我的英文單字練習</h1>
-    <div id="quiz">
-        <p>題目：半徑</p>
-        <input type="text" id="answer">
-        <button onclick="check()">送出</button>
-        <p id="result"></p>
+    <div id="box">
+        <h2 id="msg">Hello welcome to my English world!!</h2>
+        <div id="setup">
+            <input type="text" id="userName" placeholder="What's your name?">
+            <button onclick="startApp()">開始練習</button>
+        </div>
+        
+        <div id="quiz-area" style="display:none;">
+            <p id="question"></p>
+            <input type="text" id="userAns" placeholder="請輸入英文單字">
+            <button onclick="checkAnswer()">送出答案</button>
+            <p id="feedback"></p>
+        </div>
+
+        <div id="final-result"></div>
     </div>
+
     <script>
-        function check() {
-            let ans = document.getElementById("answer").value;
-            if(ans == "radius") {
-                document.getElementById("result").innerHTML = "✅ 正確！";
-            } else {
-                document.getElementById("result").innerHTML = "❌ 錯誤，答案是 radius";
+        let english_list = ["combine", "commercial", "complex", "concern", "conclude", "contact", "contain", "contract"];
+        let chinese_list = ["合併", "廣告;商業的", "複雜的", "涉及", "做出結論", "連絡", "包含", "契約"];
+        let my_list = [];
+        let score = 0;
+        let currentIdx = 0;
+        let numToTest = 0;
+        let wrong_list = [];
+
+        function startApp() {
+            let name = document.getElementById("userName").value;
+            if(!name) name = "Friend";
+            document.getElementById("msg").innerText = `Hi!! ${name} Let's practice English together^o^`;
+            document.getElementById("setup").innerHTML = `
+                <p>今天要考幾個單字？(1-${english_list.length})</p>
+                <input type="number" id="testNum" value="5">
+                <button onclick="initQuiz()">開始考試</button>
+            `;
+        }
+
+        function initQuiz() {
+            numToTest = parseInt(document.getElementById("testNum").value);
+            // 隨機洗牌邏輯 (對應你 Python 的 shuffle)
+            for (let i = 0; i < english_list.length; i++) {
+                my_list.push({ en: english_list[i], ch: chinese_list[i] });
             }
+            my_list.sort(() => Math.random() - 0.5);
+
+            document.getElementById("setup").style.display = "none";
+            document.getElementById("quiz-area").style.display = "block";
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentIdx < numToTest) {
+                document.getElementById("question").innerText = `題目顯示：${my_list[currentIdx].ch}`;
+                document.getElementById("userAns").value = "";
+                document.getElementById("feedback").innerText = "";
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function checkAnswer() {
+            let userAns = document.getElementById("userAns").value.toLowerCase().trim();
+            let correctAns = my_list[currentIdx].en;
+
+            if (userAns === correctAns) {
+                document.getElementById("feedback").innerText = "✅ Correct! Good job↖(^ω^)↗";
+                score += 5;
+            } else {
+                document.getElementById("feedback").innerText = `❌ wrong...Answer is: ${correctAns}`;
+                wrong_list.push(`${my_list[currentIdx].ch}: ${correctAns}`);
+            }
+
+            currentIdx++;
+            setTimeout(showQuestion, 1500); // 延遲1.5秒跳下一題，對應你的 time.sleep
+        }
+
+        function finishQuiz() {
+            document.getElementById("quiz-area").style.display = "none";
+            let resultHTML = `<h3>Test over! You get ${score} points</h3>`;
+            if (wrong_list.length > 0) {
+                resultHTML += `<p class="wrong">Today's wrong list:</p><ul>`;
+                wrong_list.forEach(item => { resultHTML += `<li class="wrong">${item}</li>`; });
+                resultHTML += `</ul>`;
+            } else {
+                resultHTML += `<p>Perfect! You are all correct!!</p>`;
+            }
+            document.getElementById("final-result").innerHTML = resultHTML;
         }
     </script>
 </body>
