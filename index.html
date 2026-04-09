@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head><title>英文單字測驗</title></head>
+<body>
+    <h1>我的英文單字練習</h1>
+    <div id="quiz">
+        <p>題目：半徑</p>
+        <input type="text" id="answer">
+        <button onclick="check()">送出</button>
+        <p id="result"></p>
+    </div>
+    <script>
+        function check() {
+            let ans = document.getElementById("answer").value;
+            if(ans == "radius") {
+                document.getElementById("result").innerHTML = "✅ 正確！";
+            } else {
+                document.getElementById("result").innerHTML = "❌ 錯誤，答案是 radius";
+            }
+        }
+    </script>
+</body>
+</html>
