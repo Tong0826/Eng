@@ -10,10 +10,8 @@
             --bg-color: #f4f1ea;       /* 無印米色背景 */
             --card-bg: #ffffff;        /* 純白卡片 */
             --text-main: #4a4a4a;      /* 深灰文字 */
-            --btn-color: #7f756d;      /* 暖灰褐按鈕 (像木頭或麻布) */
-            --btn-hover: #5d5550;      /* 深褐色 (滑鼠移上去時) */
-            --accent-green: #8da399;   /* 柔和綠 (正確時顯示) */
-            --accent-red: #c98a7d;     /* 柔和紅 (錯誤時顯示) */
+            --btn-color: #7f756d;      /* 暖灰褐按鈕 */
+            --btn-hover: #5d5550;      /* 深褐色 */
         }
 
         body { 
@@ -24,15 +22,14 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             min-height: 100vh;
-            letter-spacing: 0.5px; /* 增加字距更有文青感 */
         }
 
         #box { 
             background: var(--card-bg);
             padding: 40px; 
-            border-radius: 12px; /* 無印風通常不用太圓，微圓即可 */
+            border-radius: 12px; 
             display: inline-block; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05); /* 非常輕微的陰影 */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
             max-width: 450px;
             width: 90%;
         }
@@ -42,7 +39,7 @@
         input { 
             padding: 12px; 
             margin: 15px 0; 
-            border-radius: 4px; /* 方正中帶點圓角 */
+            border-radius: 4px; 
             border: 1px solid #dcdcdc; 
             background-color: #fafafa;
             width: 80%;
@@ -52,7 +49,6 @@
         }
         input:focus { border-color: var(--btn-color); background-color: #fff; }
 
-        /* 按鈕美化與動畫 */
         button { 
             padding: 12px 30px; 
             background-color: var(--btn-color); 
@@ -67,34 +63,31 @@
 
         button:hover { 
             background-color: var(--btn-hover); 
-            letter-spacing: 1px; /* 移上去字距變寬的小動畫 */
+            transform: translateY(-2px);
         }
 
-        button:active { transform: scale(0.98); } /* 按下去微微縮小 */
+        button:active { transform: scale(0.98); }
 
-        #feedback { margin-top: 20px; font-weight: 500; }
-        .correct-text { color: var(--accent-green); }
-        .wrong-text { color: var(--accent-red); }
-        .wrong-list-item { color: var(--accent-red); text-align: left; font-size: 14px; margin: 8px 0; }
+        #feedback { margin-top: 20px; font-weight: bold; font-size: 18px; }
+        .wrong-list-item { text-align: left; font-size: 15px; margin: 8px 0; }
     </style>
 </head>
 <body>
 
     <div id="box">
-        <h2 id="msg">Vocabulary Practice</h2>
+        <h2 id="msg">Hello wellcome to my English world!!</h2>
         
         <div id="setup">
-            <p>Welcome back.</p>
-            <input type="text" id="userName" placeholder="Your name">
+            <input type="text" id="userName" placeholder="what's your name:">
             <br>
             <button onclick="startApp()">Enter</button>
         </div>
         
         <div id="quiz-area" style="display:none;">
             <p id="question" style="font-size: 18px; color: #666;"></p>
-            <input type="text" id="userAns" placeholder="English..." onkeypress="handleKeyPress(event)">
+            <input type="text" id="userAns" placeholder="請輸入對應的英文單字：" onkeypress="handleKeyPress(event)">
             <br>
-            <button onclick="checkAnswer()">Submit</button>
+            <button onclick="checkAnswer()">送出答案</button>
             <p id="feedback"></p>
         </div>
 
@@ -102,7 +95,6 @@
     </div>
 
     <script>
-        // 你的 20 個單字庫
         const english_list = ["combine", "commercial", "complex", "concern", "conclude", "contact", "contain", "contract", "cure", "court", "current", "debate", "debt", "depth", "detail", "director", "disease", "divide", "division", "domestic"];
         const chinese_list = ["合併", "廣告;商業的", "複雜的", "涉及", "做出結論", "連絡", "包含", "契約", "治療", "法院", "目前的", "辯論", "債務", "深度", "細節", "指導者", "疾病", "分開", "分割", "內部的"];
         
@@ -113,13 +105,14 @@
         let wrong_list = [];
 
         function startApp() {
-            let name = document.getElementById("userName").value || "Learner";
-            document.getElementById("msg").innerText = `Hello, ${name}.`;
+            let name = document.getElementById("userName").value || "Friend";
+            document.getElementById("msg").innerText = `Hi!! ${name} Let's practice English together^o^`;
             document.getElementById("setup").innerHTML = `
-                <p style="color:#888">How many words today?</p>
+                <p>Are U ready??Let's start...</p>
+                <p>今天要考幾個單字？</p>
                 <input type="number" id="testNum" value="5" min="1" max="${english_list.length}">
                 <br>
-                <button onclick="initQuiz()">Start</button>
+                <button onclick="initQuiz()">開始考試</button>
             `;
         }
 
@@ -135,7 +128,7 @@
 
         function showQuestion() {
             if (currentIdx < numToTest) {
-                document.getElementById("question").innerText = `Question: ${quiz_data[currentIdx].ch}`;
+                document.getElementById("question").innerText = `題目顯示：${quiz_data[currentIdx].ch}`;
                 document.getElementById("userAns").value = "";
                 document.getElementById("userAns").focus();
                 document.getElementById("feedback").innerText = "";
@@ -150,12 +143,14 @@
             let feedback = document.getElementById("feedback");
 
             if (userAns === correctAns) {
-                feedback.className = "correct-text";
-                feedback.innerText = "✓ Correct";
+                // 保留你的原本文字與表情！
+                feedback.innerText = "\nCorrect! Good job↖(^ω^)↗";
+                feedback.style.color = "#8da399"; 
                 score += 5;
             } else {
-                feedback.className = "wrong-text";
-                feedback.innerText = `✗ Answer: ${correctAns}`;
+                // 保留你的原本文字！
+                feedback.innerText = "\nwrong...Answer is: " + correctAns;
+                feedback.style.color = "#c98a7d";
                 wrong_list.push({ch: quiz_data[currentIdx].ch, en: correctAns});
             }
 
@@ -169,17 +164,18 @@
 
         function finishQuiz() {
             document.getElementById("quiz-area").style.display = "none";
-            let resultHTML = `<h3 style="color:#555">Result: ${score} points</h3>`;
+            let resultHTML = `<hr><p>Test over! U get ${score} point</p>`;
+            
             if (wrong_list.length > 0) {
-                resultHTML += `<p style="text-align:left; color:#999; font-size:14px;">Review list:</p><ul style="list-style:none; padding:0;">`;
+                resultHTML += `<p>Today's wrong list: </p><ul style="list-style:none; padding:0;">`;
                 wrong_list.forEach(item => {
                     resultHTML += `<li class="wrong-list-item">― ${item.ch} : ${item.en}</li>`;
                 });
                 resultHTML += `</ul>`;
             } else {
-                resultHTML += `<p class="correct-text">Well done. Everything is perfect.</p>`;
+                resultHTML += `<p>Perfect you are all corrcet!!</p>`;
             }
-            resultHTML += `<br><button onclick="location.reload()">Retry</button>`;
+            resultHTML += `<br><button onclick="location.reload()">再測驗一次</button>`;
             document.getElementById("final-result").innerHTML = resultHTML;
         }
     </script>
