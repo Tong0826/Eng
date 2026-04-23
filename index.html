@@ -11,13 +11,11 @@
     text-align: center; 
     padding: 40px 20px; 
     margin: 0;
-    /* 文青幾何圖形：使用 SVG 圖案 (網頁版專用) */
-    background-color: #e5e5f7;
-    background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #e5e5f7 10px ), repeating-linear-gradient( #444cf755, #444cf7 );
-    background-size: 20px 20px;
-    background-blend-mode: color-burn; /* 讓圖案和顏色融合 */
+    /* 極簡無印風：淡雅的暖灰色背景 */
+    background-color: #f4f1ea;
     min-height: 100vh;
 }
+
 
 
         #box { 
@@ -44,23 +42,13 @@
         input:focus { border-color: #008cba; outline: none; box-shadow: 0 0 8px rgba(0,140,186,0.2); }
 
         button { 
-            padding: 12px 28px; 
-            background-color: #008cba; 
-            color: white; 
-            border: none; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+    /* ...其他設定維持不變... */
+    background-color: #4CAF50; /* 草綠色 */
+}
+button:hover { 
+    background-color: #45a049; /* 深綠色 */
+}
 
-        button:hover { 
-            background-color: #0077a3; 
-            transform: translateY(-3px); 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-        }
 
         button:active { transform: translateY(1px); }
 
