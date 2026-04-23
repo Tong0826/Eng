@@ -11,10 +11,14 @@
     text-align: center; 
     padding: 40px 20px; 
     margin: 0;
-    /* 極簡無印風：淡雅的暖灰色背景 */
-    background-color: #f4f1ea;
+    /* 文青幾何圖形：使用 SVG 圖案 (網頁版專用) */
+    background-color: #e5e5f7;
+    background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #e5e5f7 10px ), repeating-linear-gradient( #444cf755, #444cf7 );
+    background-size: 20px 20px;
+    background-blend-mode: color-burn; /* 讓圖案和顏色融合 */
     min-height: 100vh;
 }
+
 
         #box { 
             background: rgba(255, 255, 255, 0.95);
