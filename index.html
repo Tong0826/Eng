@@ -79,6 +79,17 @@
         
         <div id="setup">
             <input type="text" id="userName" placeholder="what's your name:">
+            <input type="text" id="userName" placeholder="what's your name:">
+<br>
+<p>今天要考幾個單字？</p>
+<select id="testNum">
+    <option value="5">考 5 題 (一題 20 分)</option>
+    <option value="10">考 10 題 (一題 10 分)</option>
+    <option value="20">考 20 題 (一題 5 分)</option>
+</select>
+<br>
+<button onclick="startApp()">Enter</button>
+
             <br>
             <button onclick="startApp()">Enter</button>
         </div>
@@ -118,6 +129,9 @@
 
         function initQuiz() {
             numToTest = parseInt(document.getElementById("testNum").value);
+    
+            pointPerQuestion = 100 / numToTest; 
+
             quiz_data = english_list.map((en, i) => ({ en, ch: chinese_list[i] }));
             quiz_data.sort(() => Math.random() - 0.5);
 
