@@ -2,20 +2,82 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>English World - Vocabulary Test</title>
-   Github
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English World - 智學單字測驗</title>
+    <style>
+        /* 🎨 CSS 美化部分 */
+        body { 
+            font-family: 'Segoe UI', Microsoft JhengHei, sans-serif; 
+            text-align: center; 
+            padding: 40px 20px; 
+            margin: 0;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); /* 天空藍漸層 */
+            min-height: 100vh;
+        }
+
+        #box { 
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px; 
+            border-radius: 25px; 
+            display: inline-block; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            max-width: 450px;
+            width: 90%;
+        }
+
+        h2 { color: #333; margin-bottom: 20px; }
+
+        input { 
+            padding: 12px; 
+            margin: 15px 0; 
+            border-radius: 12px; 
+            border: 2px solid #e0e0e0; 
+            width: 80%;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        input:focus { border-color: #008cba; outline: none; box-shadow: 0 0 8px rgba(0,140,186,0.2); }
+
+        button { 
+            padding: 12px 28px; 
+            background-color: #008cba; 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        button:hover { 
+            background-color: #0077a3; 
+            transform: translateY(-3px); 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        button:active { transform: translateY(1px); }
+
+        #feedback { margin-top: 15px; font-weight: bold; font-size: 18px; }
+        .wrong-text { color: #ff4d4d; }
+        .correct-text { color: #4CAF50; }
+        .wrong-list-item { color: #ff4d4d; text-align: left; margin: 5px 0; }
+    </style>
 </head>
 <body>
     <div id="box">
         <h2 id="msg">Hello welcome to my English world!!</h2>
+        
         <div id="setup">
-            <input type="text" id="userName" placeholder="What's your name?">
+            <input type="text" id="userName" placeholder="請問你的名字是？">
             <button onclick="startApp()">開始練習</button>
         </div>
         
         <div id="quiz-area" style="display:none;">
-            <p id="question"></p>
-            <input type="text" id="userAns" placeholder="請輸入英文單字">
+            <p id="question" style="font-size: 20px; font-weight: bold;"></p>
+            <input type="text" id="userAns" placeholder="請輸入英文單字" onkeypress="handleKeyPress(event)">
+            <br>
             <button onclick="checkAnswer()">送出答案</button>
             <p id="feedback"></p>
         </div>
@@ -24,32 +86,32 @@
     </div>
 
     <script>
-        let english_list = ["combine", "commercial", "complex", "concern", "conclude", "contact", "contain", "contract" , "cure" , "court" ,"current" , "debate" , "debt" , "depth" , "detail" , "director" , "disease" , "divide" , "division" , "domestic" , "doubt" , "drug" , "due" , "dull" , "degree"];
-        let chinese_list = ["合併", "廣告;商業的", "複雜的", "涉及", "做出結論", "連絡", "包含", "契約" , "治療" , "法院" , "目前的" , "辯論" , "債務" , "深度" , "細節" , "指揮者" , "疾病" , "分開" , "分割" , "內部的" , "懷疑" , "藥品" , "由於" , "乏味的" , "程度" ];
-        let my_list = [];
+        /* 🧠 JavaScript 邏輯部分 (對應你的 Python) */
+        const english_list = ["combine", "commercial", "complex", "concern", "conclude", "contact", "contain", "contract", "cure", "court", "current", "debate", "debt", "depth", "detail", "director", "disease", "divide", "division", "domestic"];
+        const chinese_list = ["合併", "廣告;商業的", "複雜的", "涉及", "做出結論", "連絡", "包含", "契約", "治療", "法院", "目前的", "辯論", "債務", "深度", "細節", "指導者", "疾病", "分開", "分割", "內部的"];
+        
+        let quiz_data = [];
         let score = 0;
         let currentIdx = 0;
         let numToTest = 0;
         let wrong_list = [];
 
         function startApp() {
-            let name = document.getElementById("userName").value;
-            if(!name) name = "Friend";
+            let name = document.getElementById("userName").value || "Lala";
             document.getElementById("msg").innerText = `Hi!! ${name} Let's practice English together^o^`;
             document.getElementById("setup").innerHTML = `
                 <p>今天要考幾個單字？(1-${english_list.length})</p>
-                <input type="number" id="testNum" value="5">
+                <input type="number" id="testNum" value="5" min="1" max="${english_list.length}">
+                <br>
                 <button onclick="initQuiz()">開始考試</button>
             `;
         }
 
         function initQuiz() {
             numToTest = parseInt(document.getElementById("testNum").value);
-            // 隨機洗牌邏輯 (對應你 Python 的 shuffle)
-            for (let i = 0; i < english_list.length; i++) {
-                my_list.push({ en: english_list[i], ch: chinese_list[i] });
-            }
-            my_list.sort(() => Math.random() - 0.5);
+            // 組合中英文並洗牌
+            quiz_data = english_list.map((en, i) => ({ en, ch: chinese_list[i] }));
+            quiz_data.sort(() => Math.random() - 0.5);
 
             document.getElementById("setup").style.display = "none";
             document.getElementById("quiz-area").style.display = "block";
@@ -58,8 +120,9 @@
 
         function showQuestion() {
             if (currentIdx < numToTest) {
-                document.getElementById("question").innerText = `題目顯示：${my_list[currentIdx].ch}`;
+                document.getElementById("question").innerText = `題目顯示：${quiz_data[currentIdx].ch}`;
                 document.getElementById("userAns").value = "";
+                document.getElementById("userAns").focus();
                 document.getElementById("feedback").innerText = "";
             } else {
                 finishQuiz();
@@ -68,30 +131,41 @@
 
         function checkAnswer() {
             let userAns = document.getElementById("userAns").value.toLowerCase().trim();
-            let correctAns = my_list[currentIdx].en;
+            let correctAns = quiz_data[currentIdx].en;
+            let feedback = document.getElementById("feedback");
 
             if (userAns === correctAns) {
-                document.getElementById("feedback").innerText = "✅ Correct! Good job↖(^ω^)↗";
+                feedback.className = "correct-text";
+                feedback.innerText = "✅ Correct! Good job↖(^ω^)↗";
                 score += 5;
             } else {
-                document.getElementById("feedback").innerText = `❌ wrong...Answer is: ${correctAns}`;
-                wrong_list.push(`${my_list[currentIdx].ch}: ${correctAns}`);
+                feedback.className = "wrong-text";
+                feedback.innerText = `❌ wrong...Answer is: ${correctAns}`;
+                wrong_list.push({ch: quiz_data[currentIdx].ch, en: correctAns});
             }
 
             currentIdx++;
-            setTimeout(showQuestion, 1500); // 延遲1.5秒跳下一題，對應你的 time.sleep
+            // 延遲 1.2 秒後跳下一題
+            setTimeout(showQuestion, 1200);
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') checkAnswer();
         }
 
         function finishQuiz() {
             document.getElementById("quiz-area").style.display = "none";
             let resultHTML = `<h3>Test over! You get ${score} points</h3>`;
             if (wrong_list.length > 0) {
-                resultHTML += `<p class="wrong">Today's wrong list:</p><ul>`;
-                wrong_list.forEach(item => { resultHTML += `<li class="wrong">${item}</li>`; });
+                resultHTML += `<p class="wrong-text">Today's wrong list:</p><ul style="list-style:none; padding:0;">`;
+                wrong_list.forEach(item => {
+                    resultHTML += `<li class="wrong-list-item">🚩 ${item.ch} : ${item.en}</li>`;
+                });
                 resultHTML += `</ul>`;
             } else {
-                resultHTML += `<p>Perfect! You are all correct!!</p>`;
+                resultHTML += `<p class="correct-text" style="font-size:24px;">Perfect! You are all correct!!</p>`;
             }
+            resultHTML += `<br><button onclick="location.reload()">再測驗一次</button>`;
             document.getElementById("final-result").innerHTML = resultHTML;
         }
     </script>
