@@ -36,7 +36,7 @@
 
         h2 { font-weight: 500; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
-        input { 
+        input, select { 
             padding: 12px; 
             margin: 15px 0; 
             border-radius: 4px; 
@@ -79,17 +79,6 @@
         
         <div id="setup">
             <input type="text" id="userName" placeholder="what's your name:">
-            <input type="text" id="userName" placeholder="what's your name:">
-<br>
-<p>今天要考幾個單字？</p>
-<select id="testNum">
-    <option value="5">考 5 題 (一題 20 分)</option>
-    <option value="10">考 10 題 (一題 10 分)</option>
-    <option value="20">考 20 題 (一題 5 分)</option>
-</select>
-<br>
-<button onclick="startApp()">Enter</button>
-
             <br>
             <button onclick="startApp()">Enter</button>
         </div>
@@ -113,15 +102,21 @@
         let score = 0;
         let currentIdx = 0;
         let numToTest = 0;
+        let pointPerQuestion = 0; // 電腦內部計算每一題的分數
         let wrong_list = [];
 
+        // 【區塊二：JavaScript 邏輯區】
         function startApp() {
             let name = document.getElementById("userName").value || "Friend";
             document.getElementById("msg").innerText = `Hi!! ${name} Let's practice English together^o^`;
             document.getElementById("setup").innerHTML = `
                 <p>Are U ready??Let's start...</p>
                 <p>今天要考幾個單字？</p>
-                <input type="number" id="testNum" value="5" min="1" max="${english_list.length}">
+                <select id="testNum">
+                    <option value="5">5 題</option>
+                    <option value="10">10 題</option>
+                    <option value="20">20 題</option>
+                </select>
                 <br>
                 <button onclick="initQuiz()">開始考試</button>
             `;
@@ -129,7 +124,7 @@
 
         function initQuiz() {
             numToTest = parseInt(document.getElementById("testNum").value);
-    
+            // 自動算出每題幾分，總分 100
             pointPerQuestion = 100 / numToTest; 
 
             quiz_data = english_list.map((en, i) => ({ en, ch: chinese_list[i] }));
@@ -157,12 +152,10 @@
             let feedback = document.getElementById("feedback");
 
             if (userAns === correctAns) {
-                // 保留你的原本文字與表情！
-                feedback.innerText = "\n✅Correct! Good job(^ω^)";
+                feedback.innerText = "\n✅Correct! Good job↖(^ω^)↗";
                 feedback.style.color = "#8da399"; 
-                score += 5;
+                score += pointPerQuestion; // 依照題數動態加分
             } else {
-                // 保留你的原本文字！
                 feedback.innerText = "\n❌Wrong...Answer is: " + correctAns;
                 feedback.style.color = "#c98a7d";
                 wrong_list.push({ch: quiz_data[currentIdx].ch, en: correctAns});
@@ -178,7 +171,9 @@
 
         function finishQuiz() {
             document.getElementById("quiz-area").style.display = "none";
-            let resultHTML = `<hr><p>Test over! U get ${score} point</p>`;
+            // 使用 Math.round 確保分數是漂亮的整數
+            let finalScore = Math.round(score);
+            let resultHTML = `<hr><p>Test over! U get ${finalScore} / 100 points</p>`;
             
             if (wrong_list.length > 0) {
                 resultHTML += `<p>Today's wrong list: </p><ul style="list-style:none; padding:0;">`;
