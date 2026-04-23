@@ -75,7 +75,7 @@
 <body>
 
     <div id="box">
-        <h2 id="msg">Hello wellcome to my English world!!</h2>
+        <h2 id="msg">Hello(o^^o)wellcome to my English world!!</h2>
         
         <div id="setup">
             <input type="text" id="userName" placeholder="what's your name:">
@@ -144,12 +144,12 @@
 
             if (userAns === correctAns) {
                 // 保留你的原本文字與表情！
-                feedback.innerText = "\nCorrect! Good job↖(^ω^)↗";
+                feedback.innerText = "\n✅Correct! Good job(^ω^)";
                 feedback.style.color = "#8da399"; 
                 score += 5;
             } else {
                 // 保留你的原本文字！
-                feedback.innerText = "\nwrong...Answer is: " + correctAns;
+                feedback.innerText = "\n❌Wrong...Answer is: " + correctAns;
                 feedback.style.color = "#c98a7d";
                 wrong_list.push({ch: quiz_data[currentIdx].ch, en: correctAns});
             }
